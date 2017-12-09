@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class ShoopingCartBottomView;
+@class ShoppingCartModel;
 
 @protocol ShoopingCartBottomViewDelegate <NSObject>
 
@@ -25,5 +26,8 @@
 @property (nonatomic, weak) id <ShoopingCartBottomViewDelegate> delegate;
 
 @property (nonatomic, strong) DDLabel *priceLabel;//总价
+
+@property (nonatomic, assign) BOOL isClick;
+
 
 @end

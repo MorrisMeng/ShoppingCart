@@ -52,21 +52,29 @@
 
 - (void)selectedAll:(UIButton *)btn {
     btn.selected = !btn.selected;
-    if (btn.selected) {
-        [btn setImage:ImgName(@"list_choose") forState:(UIControlStateNormal)];
-    } else {
-        [btn setImage:ImgName(@"list_unchoose") forState:(UIControlStateNormal)];
-    }
+    [self setBtnImg:btn.selected];
     if ([self.delegate respondsToSelector:@selector(allGoodsIsSelected:withButton:)])
     {
         [self.delegate allGoodsIsSelected:btn.selected withButton:btn];
     }
 }
+- (void)setBtnImg:(BOOL)selected {
+    if (selected) {
+        [_selectAllBtn setImage:ImgName(@"list_choose") forState:(UIControlStateNormal)];
+    } else {
+        [_selectAllBtn setImage:ImgName(@"list_unchoose") forState:(UIControlStateNormal)];
+    }
+}
+
 - (void)pay:(UIButton *)btn {
     if ([self.delegate respondsToSelector:@selector(paySelectedGoods:)]) {
         [self.delegate paySelectedGoods:btn];
     }
 }
 
+- (void)setIsClick:(BOOL)isClick {
+    _isClick = isClick;
+    [self setBtnImg:_isClick];
+}
 
 @end

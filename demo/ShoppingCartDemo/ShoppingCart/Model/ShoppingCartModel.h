@@ -13,6 +13,9 @@
 //view model
 @interface ShoppingCartModel : NSObject
 
+@property (nonatomic, assign) BOOL allSelected;//是否全选
+@property (nonatomic, strong) NSArray <__kindof ShopModel *> *shops;//是否全选
+
 //请求店铺数据，处理数据并返回结果
 + (void)requestDataWithSucess:(void(^)(NSArray <__kindof ShopModel *>*result))sucess failure:(void(^)(void))failure;
 

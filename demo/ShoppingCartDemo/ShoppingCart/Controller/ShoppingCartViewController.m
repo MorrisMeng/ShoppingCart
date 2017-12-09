@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
+@property (nonatomic, strong) ShoopingCartBottomView *bottomView;
+
 @end
 
 @implementation ShoppingCartViewController
@@ -37,7 +39,7 @@
 {
     [self.view addSubview:self.tableView];
     
-    [self.view addSubview:[self setUpBottomView]];
+    [self.view addSubview:self.bottomView];
 }
 //网络请求数据(这里使用本地模拟数据)
 - (void)initData {
@@ -92,10 +94,20 @@
     if (!hearderView) {
         hearderView = [[ShoppingCartSectionHeaderView alloc] initWithReuseIdentifier:identifier];
         hearderView.delegate = self;
-        hearderView.section = section;
     }
+    hearderView.section = section;
+
     ShopModel *shopModel = self.dataSource[section];
     [hearderView setInfo:shopModel];
+    
+    //判断是否全选
+    BOOL allSelected = YES;
+    for (ShopModel *shopModel in self.dataSource) {
+        if (!shopModel.isSelected) {
+            allSelected = NO;
+        }
+    }
+    [self.bottomView setIsClick:allSelected];
     
     return hearderView;
 }
@@ -165,10 +177,12 @@
 }
 
 #pragma mark - set/get
-- (ShoopingCartBottomView *)setUpBottomView {
-    ShoopingCartBottomView *bottomView = [[ShoopingCartBottomView alloc] initWithFrame:CGRectMake(0, kScreenHeight-44-kIPhoneXBottomHeight, kScreenWidth, 44)];
-    bottomView.delegate = self;
-    return bottomView;
+- (ShoopingCartBottomView *)bottomView {
+    if (!_bottomView) {
+        _bottomView = [[ShoopingCartBottomView alloc] initWithFrame:CGRectMake(0, kScreenHeight-44-kIPhoneXBottomHeight, kScreenWidth, 44)];
+        _bottomView.delegate = self;
+    }
+    return _bottomView;
 }
 - (UITableView *)tableView {
     if (!_tableView) {
