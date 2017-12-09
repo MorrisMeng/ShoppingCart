@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class ShoppingCart;
-@class ShoppingCartGoods;
+@class ShopModel;
+@class GoodsModel;
 
 //view model
 @interface ShoppingCartModel : NSObject
 
 //请求店铺数据，处理数据并返回结果
-+ (void)requestDataWithSucess:(void(^)(NSArray <__kindof ShoppingCartGoods *>*result))sucess failure:(void(^)(void))failure;
++ (void)requestDataWithSucess:(void(^)(NSArray <__kindof ShopModel *>*result))sucess failure:(void(^)(void))failure;
 
 @end
 
@@ -22,18 +22,19 @@
 
 
 //店铺模型
-@interface ShoppingCart : NSObject
+@interface ShopModel : NSObject
 
 @property (nonatomic, strong) NSString *shopId;//店铺ID
 @property (nonatomic, strong) NSString *shopName;//店铺名
-@property (nonatomic, strong) NSArray <__kindof ShoppingCartGoods *> *goods;//商品列表
+@property (nonatomic, assign) BOOL isSelected;//整个section的商品是否被选中
+@property (nonatomic, strong) NSArray <__kindof GoodsModel *> *goods;//商品列表
 
 @end
 
 
 
 //商品模型
-@interface ShoppingCartGoods : NSObject
+@interface GoodsModel : NSObject
 
 @property (nonatomic, strong) NSString *goodsId;//商品ID
 @property (nonatomic, strong) NSString *count;//商品数量

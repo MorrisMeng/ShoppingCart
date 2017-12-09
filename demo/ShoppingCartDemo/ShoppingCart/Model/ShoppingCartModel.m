@@ -10,7 +10,7 @@
 
 @implementation ShoppingCartModel
 
-+ (void)requestDataWithSucess:(void(^)(NSArray <__kindof ShoppingCartGoods *>*result))sucess failure:(void(^)(void))failure
++ (void)requestDataWithSucess:(void(^)(NSArray <__kindof ShopModel *>*result))sucess failure:(void(^)(void))failure
 {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ShopCartList" ofType:@"plist"];
     NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:filePath];
@@ -23,29 +23,30 @@
         NSMutableArray *shoppingCartArray = [[NSMutableArray alloc] init];
         for (NSDictionary *shop in shops)
         {
-            ShoppingCart *shopCart = [[ShoppingCart alloc] init];
-            shopCart.shopId = shop[@"shopId"];
-            shopCart.shopName = shop[@"shopName"];
-
+            ShopModel *shopModel = [[ShopModel alloc] init];
+            shopModel.shopId = shop[@"shopId"];
+            shopModel.shopName = shop[@"shopName"];
+            shopModel.isSelected = [shop[@"isSelected"] integerValue];
+            
             NSArray *goods = shop[@"goods"];
             //存储商品模型的数组
             NSMutableArray *goosArray = [[NSMutableArray alloc] init];
             for (NSDictionary *goodsDict in goods)
             {
-                ShoppingCartGoods *shoppGoods = [[ShoppingCartGoods alloc] init];
-                shoppGoods.goodsId = goodsDict[@"goodsId"];
-                shoppGoods.goodsName = goodsDict[@"goodsName"];
-                shoppGoods.count = goodsDict[@"count"];
-                shoppGoods.price = goodsDict[@"price"];
-                shoppGoods.imageUrl = goodsDict[@"imageUrl"];
-                shoppGoods.isSelected = [goodsDict[@"isSelected"] integerValue];
+                GoodsModel *goodsModel = [[GoodsModel alloc] init];
+                goodsModel.goodsId = goodsDict[@"goodsId"];
+                goodsModel.goodsName = goodsDict[@"goodsName"];
+                goodsModel.count = goodsDict[@"count"];
+                goodsModel.price = goodsDict[@"price"];
+                goodsModel.imageUrl = goodsDict[@"imageUrl"];
+                goodsModel.isSelected = [goodsDict[@"isSelected"] integerValue];
                 
-                [goosArray addObject:shoppGoods];
+                [goosArray addObject:goodsModel];
             }
             
-            shopCart.goods = goosArray;
+            shopModel.goods = goosArray;
             
-            [shoppingCartArray addObject:shopCart];
+            [shoppingCartArray addObject:shopModel];
         }
         
         
@@ -63,14 +64,14 @@
 
 
 
-@implementation ShoppingCart
+@implementation ShopModel
 
 @end
 
 
 
 
-@implementation ShoppingCartGoods
+@implementation GoodsModel
 
 @end
 

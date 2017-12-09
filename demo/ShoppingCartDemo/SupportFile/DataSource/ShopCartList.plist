@@ -9,13 +9,15 @@
 			<string>0001</string>
 			<key>shopName</key>
 			<string>李宁官方旗舰店（五道口店）</string>
+			<key>isSelected</key>
+			<string>0</string>
 			<key>goods</key>
 			<array>
 				<dict>
 					<key>goodsId</key>
 					<string>4aea47a653a2c7bc0153a2cdca680003</string>
 					<key>isSelected</key>
-					<string>1</string>
+					<string>0</string>
 					<key>count</key>
 					<string>1</string>
 					<key>goodsName</key>
@@ -46,13 +48,15 @@
 			<string>0002</string>
 			<key>shopName</key>
 			<string>安踏官方旗舰店（国贸店）</string>
+			<key>isSelected</key>
+			<string>0</string>
 			<key>goods</key>
 			<array>
 				<dict>
 					<key>goodsId</key>
 					<string>4aea47a653a2c7bc0153a2cdca680003</string>
 					<key>isSelected</key>
-					<string>1</string>
+					<string>0</string>
 					<key>count</key>
 					<string>1</string>
 					<key>goodsName</key>
@@ -80,7 +84,7 @@
 					<key>goodsId</key>
 					<string>4aea47a653a2c7bc0153a2cdca680003</string>
 					<key>isSelected</key>
-					<string>1</string>
+					<string>0</string>
 					<key>count</key>
 					<string>2</string>
 					<key>goodsName</key>
@@ -97,6 +101,8 @@
 			<string>0003</string>
 			<key>shopName</key>
 			<string>嘟嘟品牌（望京店）</string>
+			<key>isSelected</key>
+			<string>0</string>
 			<key>goods</key>
 			<array>
 				<dict>

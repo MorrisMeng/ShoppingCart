@@ -34,6 +34,7 @@
         
         _selectBtn = [DDButton buttonWithType:UIButtonTypeCustom];
         [_selectBtn setBackgroundImage:[UIImage imageNamed:@"list_unchoose"] forState:UIControlStateNormal];
+        [_selectBtn addTarget:self action:@selector(selectedAll:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_selectBtn];
         
         _shopImageView = [[UIImageView alloc] init];
@@ -47,8 +48,26 @@
     return self;
 }
 
-- (void)setInfo:(ShoppingCart *)shopCart {
-    _shopTitleLabel.text = shopCart.shopName;
+- (void)selectedAll:(UIButton *)btn {
+    btn.selected = !btn.selected;
+    [self setSelectedBtnImg:btn.selected];
+    
+    if ([self.delegate respondsToSelector:@selector(hearderView:isSelected:section:)]) {
+        [self.delegate hearderView:self isSelected:btn.selected section:self.section];
+    }
+}
+- (void)setSelectedBtnImg:(BOOL)slected {
+    if (slected) {
+        [_selectBtn setImage:ImgName(@"list_choose") forState:(UIControlStateNormal)];
+    } else {
+        [_selectBtn setImage:ImgName(@"list_unchoose") forState:(UIControlStateNormal)];
+    }
+}
+
+- (void)setInfo:(ShopModel *)shopModel {
+    _shopTitleLabel.text = shopModel.shopName;
+    _selectBtn.selected = shopModel.isSelected;
+    [self setSelectedBtnImg:_selectBtn.selected];
 }
 
 @end

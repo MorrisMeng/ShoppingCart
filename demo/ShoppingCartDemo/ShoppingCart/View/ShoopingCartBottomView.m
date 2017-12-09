@@ -11,7 +11,6 @@
 @interface ShoopingCartBottomView ()
 {
     DDButton *_selectAllBtn;
-    DDLabel *_priceLabel;
     UIButton *_balanceBtn;
 }
 @end
@@ -33,6 +32,7 @@
         [_selectAllBtn setImage:[UIImage imageNamed:@"list_unchoose"] forState:UIControlStateNormal];
         [_selectAllBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
         [_selectAllBtn setTitle:@"全选" forState:UIControlStateNormal];
+        [_selectAllBtn addTarget:self action:@selector(selectedAll:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_selectAllBtn];
         
         _priceLabel = [[DDLabel alloc] init];
@@ -44,9 +44,29 @@
         [_balanceBtn setTitle:@"结算" forState:UIControlStateNormal];
         [_balanceBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_balanceBtn setBackgroundColor:RED_COLOR];
+        [_balanceBtn addTarget:self action:@selector(pay:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_balanceBtn];
     }
     return self;
 }
+
+- (void)selectedAll:(UIButton *)btn {
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        [btn setImage:ImgName(@"list_choose") forState:(UIControlStateNormal)];
+    } else {
+        [btn setImage:ImgName(@"list_unchoose") forState:(UIControlStateNormal)];
+    }
+    if ([self.delegate respondsToSelector:@selector(allGoodsIsSelected:withButton:)])
+    {
+        [self.delegate allGoodsIsSelected:btn.selected withButton:btn];
+    }
+}
+- (void)pay:(UIButton *)btn {
+    if ([self.delegate respondsToSelector:@selector(paySelectedGoods:)]) {
+        [self.delegate paySelectedGoods:btn];
+    }
+}
+
 
 @end

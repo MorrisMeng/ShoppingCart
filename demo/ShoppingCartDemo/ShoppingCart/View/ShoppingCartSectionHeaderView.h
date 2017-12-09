@@ -7,10 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ShoppingCart;
+@class ShopModel;
+@class ShoppingCartSectionHeaderView;
+
+@protocol ShoppingCartSectionHeaderViewDelegate <NSObject>
+
+- (void)hearderView:(ShoppingCartSectionHeaderView *)headerView isSelected:(BOOL)isSelected section:(NSInteger)section;
+
+@end
 
 @interface ShoppingCartSectionHeaderView : UITableViewHeaderFooterView
 
-- (void)setInfo:(ShoppingCart *)shopCart;
+@property (nonatomic, weak) id <ShoppingCartSectionHeaderViewDelegate> delegate;
+@property (nonatomic) NSInteger section;
+
+
+
+- (void)setInfo:(ShopModel *)shopModel;
 
 @end

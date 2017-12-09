@@ -48,6 +48,7 @@
         
         _selectBtn = [DDButton buttonWithType:UIButtonTypeCustom];
         [_selectBtn setBackgroundImage:[UIImage imageNamed:@"list_unchoose"] forState:UIControlStateNormal];
+        [_selectBtn addTarget:self action:@selector(selectedGoods:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_selectBtn];
 
         _goodsImageView = [[UIImageView alloc] init];
@@ -63,12 +64,22 @@
     return self;
 }
 
+- (void)selectedGoods:(UIButton *)btn {
+    _select = !_select;
+    UIImage *selectBtnImage = (_select)?(ImgName(@"list_choose")):(ImgName(@"list_unchoose"));
+    [_selectBtn setBackgroundImage:selectBtnImage forState:UIControlStateNormal];
+    
+    if ([self.delegate respondsToSelector:@selector(cell:selected:indexPath:)]) {
+        [self.delegate cell:self selected:_select indexPath:self.indexPath];
+    }
+}
 
-- (void)setInfo:(ShoppingCartGoods *)goodsModel {
+- (void)setInfo:(GoodsModel *)goodsModel {
     
     [_goodsImageView sd_setImageWithURL:[NSURL URLWithString:goodsModel.imageUrl] placeholderImage:[UIImage imageNamed:@"shopCart"]];
     
-    UIImage *selectBtnImage = (goodsModel.isSelected)?(ImgName(@"list_choose")):(ImgName(@"list_unchoose"));
+    _select = goodsModel.isSelected;
+    UIImage *selectBtnImage = _select?(ImgName(@"list_choose")):(ImgName(@"list_unchoose"));
     [_selectBtn setBackgroundImage:selectBtnImage forState:UIControlStateNormal];
 
     _goodNameLabel.text = goodsModel.goodsName;
