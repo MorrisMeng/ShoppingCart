@@ -49,7 +49,6 @@
             [shoppingCartArray addObject:shopModel];
         }
         
-        
         if (sucess) {
             sucess(shoppingCartArray);
         }

@@ -21,7 +21,7 @@
     [super layoutSubviews];
     
     _selectAllBtn.frame = CGRectMake(0, 0, 88+20, self.frame.size.height);
-    _priceLabel.frame = CGRectMake(88+20, 0, kScreenWidth-(88+20)*2, self.frame.size.height);
+    _allPriceLabel.frame = CGRectMake(88+20, 0, kScreenWidth-(88+20)*2-10, self.frame.size.height);
     _balanceBtn.frame = CGRectMake(kScreenWidth-88-20, 0, 88+20, self.frame.size.height);
 }
 
@@ -35,15 +35,17 @@
         [_selectAllBtn addTarget:self action:@selector(selectedAll:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_selectAllBtn];
         
-        _priceLabel = [[DDLabel alloc] init];
-        _priceLabel.text = @"总价：";
-        _priceLabel.textAlignment = NSTextAlignmentRight;
-        [self addSubview:_priceLabel];
+        _allPriceLabel = [[DDLabel alloc] init];
+        _allPriceLabel.text = @"总价：";
+        _allPriceLabel.textAlignment = NSTextAlignmentRight;
+        [self addSubview:_allPriceLabel];
         
         _balanceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_balanceBtn setTitle:@"结算" forState:UIControlStateNormal];
         [_balanceBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_balanceBtn setBackgroundColor:RED_COLOR];
+        [_balanceBtn setAlpha:0.5];
+        [_balanceBtn setEnabled:NO];
         [_balanceBtn addTarget:self action:@selector(pay:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_balanceBtn];
     }
@@ -65,7 +67,6 @@
         [_selectAllBtn setImage:ImgName(@"list_unchoose") forState:(UIControlStateNormal)];
     }
 }
-
 - (void)pay:(UIButton *)btn {
     if ([self.delegate respondsToSelector:@selector(paySelectedGoods:)]) {
         [self.delegate paySelectedGoods:btn];
@@ -74,7 +75,17 @@
 
 - (void)setIsClick:(BOOL)isClick {
     _isClick = isClick;
+    _selectAllBtn.selected = _isClick;
     [self setBtnImg:_isClick];
+}
+- (void)setPayEnable:(BOOL)payEnable {
+    _payEnable = payEnable;
+    if (_payEnable) {
+        [_balanceBtn setAlpha:1.0];
+    } else {
+        [_balanceBtn setAlpha:0.5];
+    }
+    [_balanceBtn setEnabled:_payEnable];
 }
 
 @end

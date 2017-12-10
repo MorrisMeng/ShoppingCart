@@ -16,7 +16,8 @@
 <UITableViewDataSource,UITableViewDelegate,ShoopingCartBottomViewDelegate,ShoppingCartSectionHeaderViewDelegate,ShoppingCartCellDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, strong) NSMutableArray *dataSource;//所有商铺数组
+@property (nonatomic, strong) NSMutableArray *selectedShop;//选中的商品数组
 
 @property (nonatomic, strong) ShoopingCartBottomView *bottomView;
 
@@ -47,7 +48,7 @@
         
         NSLog(@"result:%@",result);
         [self result:result];
-
+        
     } failure:^{
         
     }];
@@ -76,10 +77,16 @@
         cell = [[ShoppingCartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.delegate = self;
     }
+    //刷新cell
     cell.indexPath = indexPath;
     ShopModel *shopModel = self.dataSource[indexPath.section];
     GoodsModel *goodsModel = shopModel.goods[indexPath.row];
     [cell setInfo:goodsModel];
+    
+    NSLog(@"--------");
+    
+    //计算并刷新价格、刷新结算按钮状态
+    [self caculatePrice:goodsModel];
     
     return cell;
 }
@@ -101,13 +108,17 @@
     [hearderView setInfo:shopModel];
     
     //判断是否全选
-    BOOL allSelected = YES;
-    for (ShopModel *shopModel in self.dataSource) {
-        if (!shopModel.isSelected) {
-            allSelected = NO;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL allSelected = YES;
+        for (ShopModel *shopModel in self.dataSource) {
+            if (!shopModel.isSelected) {
+                allSelected = NO;
+            }
         }
-    }
-    [self.bottomView setIsClick:allSelected];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.bottomView setIsClick:allSelected];
+        });
+    });
     
     return hearderView;
 }
@@ -131,6 +142,7 @@
 #pragma mark - ShoopingCartBottomViewDelegate
 //全选
 - (void)allGoodsIsSelected:(BOOL)selccted withButton:(UIButton *)btn {
+    //修改数据源数据，刷新列表
     for (ShopModel *shopModel in self.dataSource) {
         shopModel.isSelected = selccted;
         for (GoodsModel *goodsModel in shopModel.goods) {
@@ -141,7 +153,10 @@
 }
 //结算
 - (void)paySelectedGoods:(UIButton *)btn {
-    
+    NSLog(@"结算，选中的商品有：\n ");
+    for (GoodsModel *goods in self.selectedShop) {
+        NSLog(@"%@ \n",goods.goodsName);
+    }
 }
 #pragma mark - ShoppingCartSectionHeaderViewDelegate
 - (void)hearderView:(ShoppingCartSectionHeaderView *)headerView isSelected:(BOOL)isSelected section:(NSInteger)section
@@ -152,8 +167,11 @@
     for (GoodsModel *goodsModel in shopModel.goods) {
         goodsModel.isSelected = isSelected;
     }
-    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:section];
-    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    
+#warning 数据源多的时候，刷新section时，页面会出现bug
+//    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:section];
+//    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadData];
 }
 #pragma mark - ShoppingCartCellDelegate
 - (void)cell:(ShoppingCartCell *)cell selected:(BOOL)isSelected indexPath:(NSIndexPath *)indexPath
@@ -172,8 +190,48 @@
     }
     shopModel.isSelected = sectionSelected;
     NSLog(@"all section selected:%d",sectionSelected);
-    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:indexPath.section];
-    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    
+#warning 数据源多的时候，刷新section时，页面会出现bug
+//    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:indexPath.section];
+//    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadData];
+}
+#pragma mark - 自定义
+- (void)caculatePrice:(GoodsModel *)goodsModel{
+    @synchronized (self.selectedShop)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            if (goodsModel.isSelected) {
+                if (![self.selectedShop containsObject:goodsModel]) {
+                    [self.selectedShop addObject:goodsModel];
+                }
+            }
+            else {
+                if ([self.selectedShop containsObject:goodsModel]) {
+                    [self.selectedShop removeObject:goodsModel];
+                }
+            }
+            
+            NSDecimalNumber *allPriceDecimal = [NSDecimalNumber zero];
+            for (GoodsModel *goods in self.selectedShop) {
+                NSString *price = goods.price;
+                NSDecimalNumber *decimalPrice = [NSDecimalNumber decimalNumberWithString:price];
+                allPriceDecimal = [allPriceDecimal decimalNumberByAdding:decimalPrice];
+            }
+            NSString *allPriceStr = [allPriceDecimal stringValue];
+            NSLog(@"总价：%@",allPriceStr);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([allPriceStr floatValue]>0) {
+                    [self.bottomView setPayEnable:YES];
+                    self.bottomView.allPriceLabel.text = [NSString stringWithFormat:@"总价：%@",[allPriceDecimal stringValue]];
+                } else {
+                    [self.bottomView setPayEnable:NO];
+                    self.bottomView.allPriceLabel.text = @"总价：";
+                }
+            });
+        });
+    }
 }
 
 #pragma mark - set/get
@@ -198,7 +256,12 @@
     }
     return _dataSource;
 }
-
+- (NSMutableArray *)selectedShop {
+    if (!_selectedShop) {
+        _selectedShop = [[NSMutableArray alloc] init];
+    }
+    return _selectedShop;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

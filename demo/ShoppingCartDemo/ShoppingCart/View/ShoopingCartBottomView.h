@@ -20,14 +20,13 @@
 
 @end
 
-
 @interface ShoopingCartBottomView : UIView
 
 @property (nonatomic, weak) id <ShoopingCartBottomViewDelegate> delegate;
 
-@property (nonatomic, strong) DDLabel *priceLabel;//总价
+@property (nonatomic, strong) DDLabel *allPriceLabel;//总价
 
-@property (nonatomic, assign) BOOL isClick;
-
+@property (nonatomic, assign) BOOL isClick;//全选按钮选中状态
+@property (nonatomic, assign) BOOL payEnable;//结算安妮是否可点击
 
 @end
