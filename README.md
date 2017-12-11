@@ -3,8 +3,7 @@ A shopping cart demo.
 
 ## 一、效果展示
 
-![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/images/unchoose.png)![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/images/choose_some.png)![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/images/choose_all.png
-)
+![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/images/unchoose.png)![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/images/choose_some.png)
 
 ## 二、功能
 
