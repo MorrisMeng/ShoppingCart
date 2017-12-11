@@ -83,8 +83,6 @@
     GoodsModel *goodsModel = shopModel.goods[indexPath.row];
     [cell setInfo:goodsModel];
     
-    NSLog(@"--------");
-    
     //计算并刷新价格、刷新结算按钮状态
     [self caculatePrice:goodsModel];
     
@@ -168,7 +166,7 @@
         goodsModel.isSelected = isSelected;
     }
     
-#warning 数据源多的时候，刷新section时，页面会出现bug
+//#warning 数据源多的时候，刷新section时，页面会出现bug
 //    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:section];
 //    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView reloadData];
@@ -191,7 +189,7 @@
     shopModel.isSelected = sectionSelected;
     NSLog(@"all section selected:%d",sectionSelected);
     
-#warning 数据源多的时候，刷新section时，页面会出现bug
+//#warning 数据源多的时候，刷新section时，页面会出现bug
 //    NSIndexSet *indexSet = [[NSIndexSet alloc]initWithIndex:indexPath.section];
 //    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView reloadData];
