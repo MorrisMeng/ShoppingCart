@@ -3,7 +3,7 @@ A shopping cart demo.
 
 ## 一、效果展示
 
-![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/tree/master/unchoose.png)![GitHub set up-w250](/Users/Dry/Documents/MorrisMeng/购物车/ShoppingCart/choose_some.png)![GitHub set up-w250](/Users/Dry/Documents/MorrisMeng/购物车/ShoppingCart/choose_all.png
+![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/unchoose.png)![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/choose_some.png)![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/choose_all.png
 )
 
 ## 二、功能
@@ -17,7 +17,7 @@ A shopping cart demo.
 ## 三、代码设计
 
 1、采用MVC设计模式
-		![GitHub set up-w250](/Users/Dry/Documents/MorrisMeng/购物车/ShoppingCart/mvc.png)
+		![GitHub set up-w250](https://github.com/MorrisMeng/ShoppingCart/raw/master/mvc.png)
 
 2、布局全代码frame布局，做了简单的适配；
 3、数据回调采用代理；
