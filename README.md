@@ -56,7 +56,9 @@
 
 ## 最后
 
-功能和界面是实现了，但是还是不够完美，如果有更好的建议，欢迎随时骚扰：helloworldios@dingtalk.com。
+功能和界面是实现了，不够完美，如果有更好的建议，欢迎随时骚扰：helloworldios@dingtalk.com。
+
+如果觉得还行，star一下，继续努力！
 
 谢谢！
 
